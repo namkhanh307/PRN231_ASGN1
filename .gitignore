@@ -3,3 +3,7 @@
 /SPHealthSupportSystem_APIService/obj
 /SPHealthSupportSystem_Repositories/obj
 /SPHealthSupportSystem_Services/obj
+*.json
+/SPHealthSupportSystem_APIService/bin
+/SPHealthSupportSystem_Repositories/bin
+/SPHealthSupportSystem_Services/bin

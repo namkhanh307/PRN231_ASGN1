@@ -24,27 +24,30 @@ namespace SPHealthSupportSystem_APIService.Controllers
 
         // GET api/<StudentHealthsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public StudentHealth GetById(int id)
         {
-            return "value";
+            return _studentHealthService.GetById(id);
         }
 
         // POST api/<StudentHealthsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<int> Post([FromBody] StudentHealth studentHealth)
         {
+            return await _studentHealthService.Create(studentHealth);
         }
 
         // PUT api/<StudentHealthsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<int> Put(int id, [FromBody] StudentHealth studentHealth)
         {
+            return await _studentHealthService.Update(studentHealth);
         }
 
         // DELETE api/<StudentHealthsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
+            return await _studentHealthService.Delete(id);
         }
     }
 }
