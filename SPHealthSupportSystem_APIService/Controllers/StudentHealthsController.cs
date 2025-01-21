@@ -8,46 +8,52 @@ namespace SPHealthSupportSystem_APIService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentHealthsController : ControllerBase
+    public class PsychologyTheorysController : ControllerBase
     {
-        private readonly IStudentHealthService _studentHealthService;
-        public StudentHealthsController(IStudentHealthService studentHealthService)
+        private readonly IPsychologyTheoryService _psychologyTheoryService;
+        public PsychologyTheorysController(IPsychologyTheoryService psychologyTheoryService)
         {
-            _studentHealthService = studentHealthService;
+            _psychologyTheoryService = psychologyTheoryService;
         }
-        // GET: api/<StudentHealthsController>
+        // GET: api/<PsychologyTheorysController>
         [HttpGet]
-        public async Task<IEnumerable<StudentHealth>> Get()
+        public async Task<IEnumerable<PsychologyTheory>> Get()
         {
-            return await _studentHealthService.GetAll();
+            return await _psychologyTheoryService.GetAll();
+        }
+        [HttpGet("{name}/{topicName}/{author}")]
+
+        public async Task<IEnumerable<PsychologyTheory>> Search(string? name, string? topicName, string? author)
+        {
+            return await _psychologyTheoryService.Search(name, topicName, author);
         }
 
-        // GET api/<StudentHealthsController>/5
+        // GET api/<PsychologyTheorysController>/5
         [HttpGet("{id}")]
-        public StudentHealth GetById(int id)
+        public PsychologyTheory GetById(int id)
         {
-            return _studentHealthService.GetById(id);
+            return _psychologyTheoryService.GetById(id);
         }
 
-        // POST api/<StudentHealthsController>
+        // POST api/<PsychologyTheorysController>
         [HttpPost]
-        public async Task<int> Post([FromBody] StudentHealth studentHealth)
+        public async Task<int> Post([FromBody] PsychologyTheory psychologyTheory)
         {
-            return await _studentHealthService.Create(studentHealth);
+            return await _psychologyTheoryService.Create(psychologyTheory);
         }
 
-        // PUT api/<StudentHealthsController>/5
+        // PUT api/<PsychologyTheorysController>/5
         [HttpPut("{id}")]
-        public async Task<int> Put(int id, [FromBody] StudentHealth studentHealth)
+        public async Task<int> Put(int id, [FromBody] PsychologyTheory psychologyTheory)
         {
-            return await _studentHealthService.Update(studentHealth);
+            return await _psychologyTheoryService.Update(psychologyTheory);
         }
 
-        // DELETE api/<StudentHealthsController>/5
+        // DELETE api/<PsychologyTheorysController>/5
         [HttpDelete("{id}")]
         public async Task<bool> Delete(int id)
         {
-            return await _studentHealthService.Delete(id);
+            return await _psychologyTheoryService.Delete(id);
         }
     }
 }

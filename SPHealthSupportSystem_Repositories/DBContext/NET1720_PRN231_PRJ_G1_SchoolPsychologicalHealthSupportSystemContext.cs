@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SPHealthSupportSystem_Repositories.Models;
 
 namespace SPHealthSupportSystem_Repositories.DBContext;
@@ -19,63 +18,50 @@ public partial class NET1720_PRN231_PRJ_G1_SchoolPsychologicalHealthSupportSyste
     {
     }
 
-    public virtual DbSet<StudentHealth> StudentHealths { get; set; }
+    public virtual DbSet<PsychologyTheory> PsychologyTheories { get; set; }
 
-    public virtual DbSet<StudentInfo> StudentInfos { get; set; }
+    public virtual DbSet<Topic> Topics { get; set; }
 
     public virtual DbSet<UserAccount> UserAccounts { get; set; }
-    public static string? GetConnectionString(string connectionStringName)
-    {
-        var config = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        string? connectionString = config.GetConnectionString(connectionStringName);
-        return connectionString;
-    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(GetConnectionString("DefaultConnection"));
-
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-    //        => optionsBuilder.UseSqlServer("Data Source=NAMKHANH;Initial Catalog=NET1720_PRN231_PRJ_G1_SchoolPsychologicalHealthSupportSystem;Persist Security Info=True;User ID=sa;Password=12345678;Encrypt=False");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=NAMKHANH;Initial Catalog=NET1720_PRN231_PRJ_G1_SchoolPsychologicalHealthSupportSystem;Persist Security Info=True;User ID=sa;Password=12345678;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<StudentHealth>(entity =>
+        modelBuilder.Entity<PsychologyTheory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__StudentM__3214EC07E3B24B43");
-
-            entity.ToTable("StudentHealth");
+            entity.ToTable("PsychologyTheory");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.AppointmentHistory).HasDefaultValue(0);
-            entity.Property(e => e.LastUpdated)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.MentalHealthCategory).HasMaxLength(100);
-            entity.Property(e => e.Notes).HasColumnType("text");
-            entity.Property(e => e.ProgramParticipation).HasDefaultValue(0);
-            entity.Property(e => e.SurveyHistoryCount).HasDefaultValue(0);
+            entity.Property(e => e.Application).HasMaxLength(50);
+            entity.Property(e => e.Author).HasMaxLength(50);
+            entity.Property(e => e.CreateAt).HasColumnType("datetime");
+            entity.Property(e => e.Criticism).HasMaxLength(50);
+            entity.Property(e => e.Description).HasMaxLength(50);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Principle).HasMaxLength(50);
+            entity.Property(e => e.RelatedTheory).HasMaxLength(50);
+            entity.Property(e => e.TheoryType).HasMaxLength(50);
+            entity.Property(e => e.UpdateAt).HasColumnType("datetime");
 
-            entity.HasOne(d => d.StudentInfo).WithMany(p => p.StudentHealths)
-                .HasForeignKey(d => d.StudentInfoId)
-                .HasConstraintName("FK_StudentMentalHealthProfile_StudentInfo");
+            entity.HasOne(d => d.Topic).WithMany(p => p.PsychologyTheories)
+                .HasForeignKey(d => d.TopicId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PsychologyTheory_Topic");
         });
 
-        modelBuilder.Entity<StudentInfo>(entity =>
+        modelBuilder.Entity<Topic>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__StudentI__3214EC07558FED9B");
-
-            entity.ToTable("StudentInfo");
+            entity.ToTable("Topic");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreateAt).HasColumnType("datetime");
-            entity.Property(e => e.Group)
-                .HasMaxLength(1)
-                .IsUnicode(false);
+            entity.Property(e => e.Description).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.UpdateAt).HasColumnType("datetime");
         });
 

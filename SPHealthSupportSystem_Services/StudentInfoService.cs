@@ -10,15 +10,15 @@ namespace SPHealthSupportSystem_Services
 {
     public class StudentInfoService
     {
-        private readonly StudentInfoRepository _studentInfoRepository;
+        private readonly TopicRepository _topicRepository;
         public StudentInfoService()
         {
-            _studentInfoRepository = new StudentInfoRepository();
+            _topicRepository = new TopicRepository();
         }
 
-        public async Task<List<StudentInfo>> GetAll()
+        public async Task<List<Topic>> GetAll()
         {
-            return _studentInfoRepository.GetAll();
+            return _topicRepository.GetAll();
         }
     }
 }

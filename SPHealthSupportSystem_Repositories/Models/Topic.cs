@@ -5,19 +5,17 @@ using System.Collections.Generic;
 
 namespace SPHealthSupportSystem_Repositories.Models;
 
-public partial class StudentInfo
+public partial class Topic
 {
     public int Id { get; set; }
 
-    public int? UserId { get; set; }
+    public string Name { get; set; }
 
-    public int? Grade { get; set; }
-
-    public string Group { get; set; }
+    public string Description { get; set; }
 
     public DateTime? CreateAt { get; set; }
 
     public DateTime? UpdateAt { get; set; }
 
-    public virtual ICollection<StudentHealth> StudentHealths { get; set; } = new List<StudentHealth>();
+    public virtual ICollection<PsychologyTheory> PsychologyTheories { get; set; } = new List<PsychologyTheory>();
 }

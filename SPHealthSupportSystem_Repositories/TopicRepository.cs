@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SPHealthSupportSystem_Repositories
 {
-    public class StudentInfoRepository : GenericRepository<StudentInfo>
+    public class TopicRepository : GenericRepository<Topic>
     {
     }
 }
