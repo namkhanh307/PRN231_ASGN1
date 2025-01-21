@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SPHealthSupportSystem_Repositories.Models;
 using SPHealthSupportSystem_Services;
 
@@ -17,6 +18,7 @@ namespace SPHealthSupportSystem_APIService.Controllers
         }
         // GET: api/<PsychologyTheorysController>
         [HttpGet]
+        [Authorize(Roles = "1, 2")]
         public async Task<IEnumerable<PsychologyTheory>> Get()
         {
             return await _psychologyTheoryService.GetAll();
@@ -29,7 +31,8 @@ namespace SPHealthSupportSystem_APIService.Controllers
         }
 
         // GET api/<PsychologyTheorysController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}")]       
+        [Authorize(Roles = "1, 2")]
         public PsychologyTheory GetById(int id)
         {
             return _psychologyTheoryService.GetById(id);
@@ -37,6 +40,7 @@ namespace SPHealthSupportSystem_APIService.Controllers
 
         // POST api/<PsychologyTheorysController>
         [HttpPost]
+        [Authorize(Roles = "1, 2")]
         public async Task<int> Post([FromBody] PsychologyTheory psychologyTheory)
         {
             return await _psychologyTheoryService.Create(psychologyTheory);
@@ -44,6 +48,8 @@ namespace SPHealthSupportSystem_APIService.Controllers
 
         // PUT api/<PsychologyTheorysController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "1, 2")]
+
         public async Task<int> Put(int id, [FromBody] PsychologyTheory psychologyTheory)
         {
             return await _psychologyTheoryService.Update(psychologyTheory);
@@ -51,6 +57,7 @@ namespace SPHealthSupportSystem_APIService.Controllers
 
         // DELETE api/<PsychologyTheorysController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "1, 2")]
         public async Task<bool> Delete(int id)
         {
             return await _psychologyTheoryService.Delete(id);

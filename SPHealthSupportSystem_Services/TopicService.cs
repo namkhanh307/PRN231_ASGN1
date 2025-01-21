@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace SPHealthSupportSystem_Services
 {
-    public class StudentInfoService
+    public class TopicService
     {
         private readonly TopicRepository _topicRepository;
-        public StudentInfoService()
+        public TopicService()
         {
             _topicRepository = new TopicRepository();
         }

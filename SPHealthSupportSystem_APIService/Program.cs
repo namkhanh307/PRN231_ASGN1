@@ -1,5 +1,9 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SPHealthSupportSystem_Services;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace SPHealthSupportSystem_APIService
@@ -16,11 +20,56 @@ namespace SPHealthSupportSystem_APIService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IPsychologyTheoryService, PsychologyTheoryService>();
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+            });
+            //DI
+            builder.Services.AddScoped<UserAccountService>();
+            builder.Services.AddScoped<IPsychologyTheoryService, PsychologyTheoryService>();
+            //JWT////JWT Config
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                    };
+                });
+            builder.Services.AddSwaggerGen(option =>
+            {
+                ////JWT Config
+                option.DescribeAllParametersInCamelCase();
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
             var app = builder.Build();
 
@@ -37,7 +86,8 @@ namespace SPHealthSupportSystem_APIService
 
 
             app.MapControllers();
-
+            app.UseHttpsRedirection();
+            app.UseAuthorization();
             app.Run();
         }
     }

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SPHealthSupportSystem_MVCWebApp.props" />
+</Project>
