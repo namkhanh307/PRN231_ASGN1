@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SPHealthSupportSystem_MVCWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dff1978ac6a1f7449fcd6ef77281826b927ee61e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0f12dfc5a41d2f26f13083c253a4513c9695bc29")]
 [assembly: System.Reflection.AssemblyProductAttribute("SPHealthSupportSystem_MVCWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SPHealthSupportSystem_MVCWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
