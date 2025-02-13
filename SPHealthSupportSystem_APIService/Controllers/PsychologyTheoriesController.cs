@@ -9,10 +9,10 @@ namespace SPHealthSupportSystem_APIService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PsychologyTheorysController : ControllerBase
+    public class PsychologyTheoriesController : ControllerBase
     {
         private readonly IPsychologyTheoryService _psychologyTheoryService;
-        public PsychologyTheorysController(IPsychologyTheoryService psychologyTheoryService)
+        public PsychologyTheoriesController(IPsychologyTheoryService psychologyTheoryService)
         {
             _psychologyTheoryService = psychologyTheoryService;
         }

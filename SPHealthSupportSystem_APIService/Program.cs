@@ -28,6 +28,8 @@ namespace SPHealthSupportSystem_APIService
             //DI
             builder.Services.AddScoped<UserAccountService>();
             builder.Services.AddScoped<IPsychologyTheoryService, PsychologyTheoryService>();
+            builder.Services.AddScoped<ITopicService, TopicService>();
+
             //JWT////JWT Config
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

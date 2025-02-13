@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SPHealthSupportSystem_Services
 {
-    public class TopicService
+    public class TopicService : ITopicService
     {
         private readonly TopicRepository _topicRepository;
         public TopicService()
