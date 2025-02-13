@@ -26,6 +26,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\nobod\Documents\GitHub\PRN231_ASGN1\SPHealthSupportSystem_MVCWebApp
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Pages/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/Account/Forbiden.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3JiaWRlbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -40,6 +44,26 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/PsychologyTheories/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHN5Y2hvbG9neVRoZW9yaWVzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/PsychologyTheories/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHN5Y2hvbG9neVRoZW9yaWVzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/PsychologyTheories/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHN5Y2hvbG9neVRoZW9yaWVzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/PsychologyTheories/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHN5Y2hvbG9neVRoZW9yaWVzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/PsychologyTheories/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHN5Y2hvbG9neVRoZW9yaWVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/nobod/Documents/GitHub/PRN231_ASGN1/SPHealthSupportSystem_MVCWebApp/Views/Shared/Error.cshtml]

@@ -55,7 +55,7 @@ namespace SPHealthSupportSystem_MVCWebApp.Controllers
 								Response.Cookies.Append("Role", role);
 								Response.Cookies.Append("TokenString", tokenString);
 
-								return RedirectToAction("Index", "Home");
+								return RedirectToAction("Index", "PsychologyTheories");
 							}
 						}
 					}
