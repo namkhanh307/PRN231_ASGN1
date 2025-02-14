@@ -5,160 +5,275 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SPHealthSupportSystem_Repositories.DBContext;
 using SPHealthSupportSystem_Repositories.Models;
+using SPHealthSupportSystem_Services;
+using static System.Net.WebRequestMethods;
 
 namespace SPHealthSupportSystem_MVCWebApp.Controllers
 {
     public class PsychologyTheoriesController : Controller
     {
-        private readonly NET1720_PRN231_PRJ_G1_SchoolPsychologicalHealthSupportSystemContext _context;
-
-        public PsychologyTheoriesController(NET1720_PRN231_PRJ_G1_SchoolPsychologicalHealthSupportSystemContext context)
-        {
-            _context = context;
-        }
+        private string APIEndPoint = "https://localhost:7254/api/";
 
         // GET: PsychologyTheories
         public async Task<IActionResult> Index()
         {
-            var nET1720_PRN231_PRJ_G1_SchoolPsychologicalHealthSupportSystemContext = _context.PsychologyTheories.Include(p => p.Topic);
-            return View(await nET1720_PRN231_PRJ_G1_SchoolPsychologicalHealthSupportSystemContext.ToListAsync());
+            using (var httpClient = new HttpClient())
+            {
+                #region Add Token to header of Request
+
+                var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+
+                #endregion
+
+
+                using (var response = await httpClient.GetAsync(APIEndPoint + "PsychologyTheories"))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<List<PsychologyTheory>>(content);
+
+                        if (result != null)
+                        {
+                            return View(result);
+                        }
+                    }
+                }
+            }
+
+            return View(new List<PsychologyTheory>());
         }
 
         // GET: PsychologyTheories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
+            using (var httpClient = new HttpClient())
             {
-                return NotFound();
+                #region Add Token to header of Request
+
+                var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+
+                #endregion
+
+
+                using (var response = await httpClient.GetAsync(APIEndPoint + "PsychologyTheories/" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<PsychologyTheory>(content);
+
+                        if (result != null)
+                        {
+                            return View(result);
+                        }
+                    }
+                }
             }
 
-            var psychologyTheory = await _context.PsychologyTheories
-                .Include(p => p.Topic)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (psychologyTheory == null)
-            {
-                return NotFound();
-            }
-
-            return View(psychologyTheory);
+            return View(new PsychologyTheory());
         }
 
-        // GET: PsychologyTheories/Create
-        public IActionResult Create()
+        public async Task<IActionResult> DeleteQuickly(string id)
         {
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id");
-            return View();
-        }
-
-        // POST: PsychologyTheories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,TopicId,Author,YearPublished,TheoryType,Principle,Application,RelatedTheory,Criticism,CreateAt,UpdateAt")] PsychologyTheory psychologyTheory)
-        {
-            if (ModelState.IsValid)
+            bool deleteStatus = false;
+            using (var httpClient = new HttpClient())
             {
-                _context.Add(psychologyTheory);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", psychologyTheory.TopicId);
-            return View(psychologyTheory);
-        }
+                var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
 
-        // GET: PsychologyTheories/Edit/5
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+                using (var response = await httpClient.DeleteAsync(APIEndPoint + "PsychologyTheories/" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        deleteStatus = true;
+                    }
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            //get ref
+            var topic = new List<Topic>();
 
-            var psychologyTheory = await _context.PsychologyTheories.FindAsync(id);
-            if (psychologyTheory == null)
+            using (var httpClient = new HttpClient())
             {
-                return NotFound();
+                #region Add Token to header of Request
+                var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+
+                #endregion
+
+
+                using (var response = await httpClient.GetAsync(APIEndPoint + "Topics/"))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        topic = JsonConvert.DeserializeObject<List<Topic>>(content);
+                    }
+                }
             }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", psychologyTheory.TopicId);
-            return View(psychologyTheory);
+            //get main
+            using (var httpClient = new HttpClient())
+            {
+                #region Add Token to header of Request
+
+                var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+
+                #endregion
+
+
+                using (var response = await httpClient.GetAsync(APIEndPoint + "PsychologyTheories/" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<PsychologyTheory>(content);
+
+                        if (result != null)
+                        {
+                            ViewData["TopicId"] = new SelectList(topic, "Id", "Name", result.TopicId);
+                            return View(result);
+                        }
+                    }
+                }
+            }
+            ViewData["TopicId"] = new SelectList(topic, "TopicId", "Name");
+            return View(new PsychologyTheory());
         }
-
-        // POST: PsychologyTheories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,TopicId,Author,YearPublished,TheoryType,Principle,Application,RelatedTheory,Criticism,CreateAt,UpdateAt")] PsychologyTheory psychologyTheory)
+        public async Task<IActionResult> Edit(int id, PsychologyTheory psychologyTheory)
         {
-            if (id != psychologyTheory.Id)
-            {
-                return NotFound();
-            }
-
+            bool saveStatus = false;
+            var topic = await this.GetTopics();
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(psychologyTheory);
-                    await _context.SaveChangesAsync();
+                    using (var httpClient = new HttpClient())
+                    {
+                        #region Add Token to header of Request
+
+                        var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+
+                        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+
+                        #endregion
+
+
+                        using (var response = await httpClient.PutAsJsonAsync(APIEndPoint + "PsychologyTheories/" + id, psychologyTheory))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var content = await response.Content.ReadAsStringAsync();
+                                var result = JsonConvert.DeserializeObject<int>(content);
+
+                                if (result > 0)
+                                {
+                                    saveStatus = true;
+                                }
+                                else
+                                {
+                                    saveStatus = false;
+                                }
+                            }
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PsychologyTheoryExists(psychologyTheory.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
+
                 }
-                return RedirectToAction(nameof(Index));
+                if (saveStatus)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewData["TopicId"] = new SelectList(topic, "Id", "Name", psychologyTheory.TopicId);
+                    return View(psychologyTheory);
+                }
             }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", psychologyTheory.TopicId);
-            return View(psychologyTheory);
-        }
-
-        // GET: PsychologyTheories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var psychologyTheory = await _context.PsychologyTheories
-                .Include(p => p.Topic)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (psychologyTheory == null)
-            {
-                return NotFound();
-            }
-
-            return View(psychologyTheory);
-        }
-
-        // POST: PsychologyTheories/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var psychologyTheory = await _context.PsychologyTheories.FindAsync(id);
-            if (psychologyTheory != null)
-            {
-                _context.PsychologyTheories.Remove(psychologyTheory);
-            }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        private bool PsychologyTheoryExists(int id)
+        public async Task<List<Topic>?> GetTopics()
         {
-            return _context.PsychologyTheories.Any(e => e.Id == id);
+            var topic = new List<Topic>();
+
+            using (var httpClient = new HttpClient())
+            {
+                #region Add Token to header of Request
+                var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+
+                #endregion
+
+
+                using (var response = await httpClient.GetAsync(APIEndPoint + "Topics/"))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        topic = JsonConvert.DeserializeObject<List<Topic>>(content);
+                    }
+                }
+            }
+            return topic;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            ViewData["TopicId"] = new SelectList(await GetTopics(), "Id", "Name");
+            return View();
+        }
+        public async Task<IActionResult> Create(PsychologyTheory psychologyTheory)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+
+                        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+                        using (var response = await httpClient.PostAsJsonAsync(APIEndPoint + "PsychologyTheories/", psychologyTheory))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var content = await response.Content.ReadAsStringAsync();
+                                var result = JsonConvert.DeserializeObject<int>(content);
+                                if (result > 0)
+                                {
+                                    return RedirectToAction(nameof(Index));
+                                }
+                            }
+                        }
+
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
+            ViewData["TopicId"] = new SelectList(await GetTopics(), "Id", "Name", psychologyTheory.TopicId);
+            return View(psychologyTheory);
         }
     }
 }
