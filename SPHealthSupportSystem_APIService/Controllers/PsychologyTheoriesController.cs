@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using SPHealthSupportSystem_Repositories.Models;
 using SPHealthSupportSystem_Services;
 
@@ -19,6 +20,7 @@ namespace SPHealthSupportSystem_APIService.Controllers
         // GET: api/<PsychologyTheorysController>
         [HttpGet]
         [Authorize(Roles = "1, 2")]
+        [EnableQuery]
         public async Task<IEnumerable<PsychologyTheory>> Get()
         {
             return await _psychologyTheoryService.GetAll();

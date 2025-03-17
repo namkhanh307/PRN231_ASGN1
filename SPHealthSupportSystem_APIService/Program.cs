@@ -1,7 +1,11 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
+using SPHealthSupportSystem_Repositories.Models;
 using SPHealthSupportSystem_Services;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -30,7 +34,7 @@ namespace SPHealthSupportSystem_APIService
             builder.Services.AddScoped<IPsychologyTheoryService, PsychologyTheoryService>();
             builder.Services.AddScoped<ITopicService, TopicService>();
 
-            //JWT////JWT Config
+            //JWT
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -73,6 +77,19 @@ namespace SPHealthSupportSystem_APIService
                     }
                 });
             });
+            //ODATA
+            static IEdmModel GetEdmModel()
+            {
+                var odataBuilder = new ODataConventionModelBuilder();
+                odataBuilder.EntitySet<PsychologyTheory>("PsychologyTheory");
+                odataBuilder.EntitySet<Topic>("Topic");
+                return odataBuilder.GetEdmModel();
+            }
+            builder.Services.AddControllers().AddOData(options =>
+            {
+                options.Select().Filter().OrderBy().Expand().SetMaxTop(null).Count();
+                options.AddRouteComponents("odata", GetEdmModel());
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -81,12 +98,7 @@ namespace SPHealthSupportSystem_APIService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
+            app.UseAuthentication();
             app.MapControllers();
             app.UseHttpsRedirection();
             app.UseAuthorization();
