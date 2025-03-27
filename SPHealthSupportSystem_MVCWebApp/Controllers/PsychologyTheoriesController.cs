@@ -208,6 +208,8 @@ namespace SPHealthSupportSystem_MVCWebApp.Controllers
                     return View(psychologyTheory);
                 }
             }
+            var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+
             return RedirectToAction(nameof(Index));
         }
         public async Task<List<Topic>?> GetTopics()
@@ -243,6 +245,7 @@ namespace SPHealthSupportSystem_MVCWebApp.Controllers
         }
         public async Task<IActionResult> Create(PsychologyTheory psychologyTheory)
         {
+
             if (ModelState.IsValid)
             {
                 try
@@ -272,8 +275,42 @@ namespace SPHealthSupportSystem_MVCWebApp.Controllers
                     throw;
                 }
             }
+            var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             ViewData["TopicId"] = new SelectList(await GetTopics(), "Id", "Name", psychologyTheory.TopicId);
             return View(psychologyTheory);
         }
+        public async Task<IActionResult> Search(string name, string description, string author)
+        {
+
+            string baseUrl = APIEndPoint + "PsychologyTheories/";
+
+            // If user entered a search query, add OData filter
+            if (!string.IsNullOrWhiteSpace(name) || !string.IsNullOrWhiteSpace(description) || !string.IsNullOrWhiteSpace(author))
+            {
+                baseUrl += $"?$filter=contains(Name,'{name}') or contains(Description,'{description}') or contains(Author,'{author}')";
+            }
+            using (var httpClient = new HttpClient())
+            {
+                var tokenString = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "TokenString").Value;
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + tokenString);
+                using (var response = await httpClient.GetAsync(baseUrl))
+                {
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception("Failed to fetch data from API");
+                    }
+
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<List<PsychologyTheory>>(content);
+                    if (result != null)
+                    {
+                        return View("Index", result);
+                    }
+                }
+            }
+            return View(new List<PsychologyTheory>());
+        }
+
     }
 }

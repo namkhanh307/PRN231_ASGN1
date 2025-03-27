@@ -9,6 +9,16 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form method="get" action="@Url.Action("Search", "PsychologyTheories")">
+    <input type="text" name="name" placeholder="Name" value="@Context.Request.Query["name"]" />
+    <input type="text" name="description" placeholder="Description" value="@Context.Request.Query["description"]" />
+    <input type="text" name="author" placeholder="Author" value="@Context.Request.Query["author"]" />
+
+    <button type="submit">Search</button>
+</form>
+<form method="get" asp-action="Index">
+    <button type="submit">Reset</button>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -46,7 +56,7 @@
                 @Html.DisplayNameFor(model => model.UpdateAt)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TopicId)
+                @Html.DisplayNameFor(model => model.First().Name)
             </th>
             <th></th>
         </tr>
@@ -88,7 +98,7 @@
                 @Html.DisplayFor(modelItem => item.UpdateAt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TopicId)
+                @Html.DisplayFor(modelItem => item.Topic.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

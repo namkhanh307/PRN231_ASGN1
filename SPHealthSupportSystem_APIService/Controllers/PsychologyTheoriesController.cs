@@ -25,8 +25,8 @@ namespace SPHealthSupportSystem_APIService.Controllers
         {
             return await _psychologyTheoryService.GetAll();
         }
-        [HttpGet("{name}/{topicName}/{author}")]
 
+        [HttpGet("{name}/{topicName}/{author}")]
         public async Task<IEnumerable<PsychologyTheory>> Search(string? name, string? topicName, string? author)
         {
             return await _psychologyTheoryService.Search(name, topicName, author);

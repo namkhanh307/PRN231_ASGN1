@@ -13,7 +13,7 @@ namespace SPHealthSupportSystem_Repositories
     {
         public async Task<List<PsychologyTheory>> GetAll()
         {
-            return await _context.PsychologyTheories.ToListAsync();
+            return await _context.PsychologyTheories.Include(a => a.Topic).ToListAsync();
         }
         public async Task<List<PsychologyTheory>> Search(string? name, string? topicName, string? author)
         {
